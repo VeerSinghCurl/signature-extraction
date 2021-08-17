@@ -16,7 +16,7 @@ One reason why [1] worked on patch-level was a lack of publicly available datase
 
 We divide our training data into two classes: `signatures` and `non-signature`. For `non-signature` class, we took 64 documents from Tobacco-800 [3, 4] to manually generate new images which which didn't contain any signatures or handwritten text. Some of these documents contained logos, as well. For the `signature` class, we combined all images from the UTSig signature database [2], which contains 8280 Persian language signatures.
 
-## Installation
+## Installation - DOESNT WORK, OPENCV-CONTRIB BROKE PATENDED ALGOS
 Clone the project and `cd` to project directory. Then, execute the following commands once to set-up your environment
 ```
 python3 -m venv venv/
@@ -24,7 +24,38 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Then you can run the GUI app with `python3 src/extract_gui.py`.
+## Installation - WORKING USING CONDA
+Create conda environment with the name 'signature_extraction' and activate virtual env
+```
+conda create --name signature_extraction
+
+conda activate signature_extraction
+```
+Install packages one by one (requirements.txt not working properly because of different channels)
+```
+conda install -c anaconda joblib
+
+conda install -c anaconda numpy
+
+conda install -c anaconda scikit-learn
+
+conda install -c anaconda scipy
+
+conda install -c conda-forge opencv
+
+conda install -c conda-forge threadpoolctl
+
+conda install -c conda-forge tqdm
+```
+opencv-contrib package will have to be built from source with NONFREE flag set. If this package installed directly then we wont be able to use a crucial function in the code. This might take some time.
+```
+CMAKE_ARGS="-DOPENCV_ENABLE_NONFREE=ON" pip install --no-binary=opencv-contrib-python opencv-contrib-python
+
+```
+Once all packages are installed to the virtual env, cd to the project directory and run the GUI app with
+```
+python3 src/extract_gui.py
+```
 
 The repository comes with trained models in the `models/` folder. To train a new model with your own data, look at the [train_test.py](./src/train_test.py) script.
 
